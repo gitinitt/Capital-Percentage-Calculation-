@@ -1,0 +1,176 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Capital Calc</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Courier Prime', monospace;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            /* Restored Static Pixel Pattern Background */
+            background-color: #72a1d0;
+            background-image: 
+                linear-gradient(45deg, #6b98c4 25%, transparent 25%, transparent 75%, #6b98c4 75%, #6b98c4),
+                linear-gradient(45deg, #6b98c4 25%, transparent 25%, transparent 75%, #6b98c4 75%, #6b98c4);
+            background-size: 16px 16px;
+            background-position: 0 0, 8px 8px;
+        }
+
+        .pixel-card {
+            background: #fff;
+            border: 4px solid #000;
+            box-shadow: 8px 8px 0px rgba(0,0,0,1);
+            max-width: 360px;
+            width: 90%;
+            image-rendering: pixelated;
+        }
+
+        .pixel-input {
+            border: 4px solid #000;
+            background: #fff;
+            outline: none;
+            padding: 10px;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        .pixel-input:focus {
+            background: #fdfdfd;
+            border-color: #3b82f6;
+        }
+
+        /* Retro Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            background: #000;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            border: 4px solid #000;
+            height: 24px;
+            width: 12px;
+            background: #fff;
+            margin-top: -10px;
+            box-shadow: 2px 2px 0px #000;
+        }
+
+        /* Result Section - Terminal Green */
+        .result-box {
+            background: #000;
+            color: #4ade80; 
+            padding: 15px;
+            border: 2px solid #333;
+        }
+
+        /* Hide number arrows */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="pixel-card">
+        <!-- Window Header -->
+        <div class="bg-black text-white p-2 flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
+            <span>Capital_Calc.sys</span>
+            <div class="flex gap-1">
+                <div class="w-2 h-2 border border-white"></div>
+                <div class="w-2 h-2 bg-white"></div>
+            </div>
+        </div>
+
+        <div class="p-6 space-y-6">
+            <!-- Capital Input -->
+            <div class="space-y-1">
+                <label class="text-[10px] font-bold uppercase text-slate-500">Input Capital</label>
+                <div class="relative">
+                    <span class="absolute left-3 top-3 font-bold">$</span>
+                    <input type="number" id="capital" placeholder="0.00" class="pixel-input pl-8 text-lg">
+                </div>
+            </div>
+
+            <!-- Percentage Input & Slider -->
+            <div class="space-y-3">
+                <div class="flex justify-between items-end">
+                    <label class="text-[10px] font-bold uppercase text-slate-500">Percentage</label>
+                    <div class="flex items-center">
+                        <input type="number" id="percentInput" value="10" min="0" max="100" class="pixel-input w-14 p-1 text-center text-sm">
+                        <span class="ml-1 font-bold">%</span>
+                    </div>
+                </div>
+                <input type="range" id="percentSlider" min="1" max="100" value="10">
+            </div>
+
+            <!-- Calculated Amount -->
+            <div class="result-box">
+                <div class="text-[8px] uppercase tracking-widest opacity-70 mb-1">Resulting Amount</div>
+                <div class="text-3xl font-bold truncate" id="resultDisplay">$0.00</div>
+            </div>
+        </div>
+        
+        <!-- Footer Status -->
+        <div class="p-3 border-t-2 border-black/10 text-center">
+            <span class="text-[8px] font-bold text-slate-400 uppercase tracking-[0.2em]">Ready_To_Calculate</span>
+        </div>
+    </div>
+
+    <script>
+        const cap = document.getElementById('capital');
+        const pIn = document.getElementById('percentInput');
+        const pSl = document.getElementById('percentSlider');
+        const res = document.getElementById('resultDisplay');
+
+        function update() {
+            const capital = parseFloat(cap.value) || 0;
+            const percent = parseFloat(pIn.value) || 0;
+            const total = (capital * percent) / 100;
+            
+            res.textContent = '$' + total.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        pSl.addEventListener('input', (e) => {
+            pIn.value = e.target.value;
+            update();
+        });
+
+        pIn.addEventListener('input', (e) => {
+            let val = parseFloat(e.target.value);
+            if (val > 100) val = 100;
+            if (val < 0) val = 0;
+            pSl.value = val || 0;
+            update();
+        });
+
+        cap.addEventListener('input', update);
+        
+        // Initial Calculation
+        update();
+    </script>
+</body>
+</html>
+
+```
